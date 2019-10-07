@@ -8,10 +8,18 @@ from department_courses.models import Course, Department
 from .forms import PostForm 
 from utilities import recaptcha_check 
 
+
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+
 #View handles 'Posts'. It responds to get and post requests from using trying to make a post on a teacher
 class PostFormView(FormView):
     template_name = 'postings/post_form.html'
     form_class = PostForm
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+      return super(HomeView, self).dispatch(*args, **kwargs)
 
     #method returns the url string to get back to the teacher profile page after submitting
     def get_success_url(self, request, teacher_name):

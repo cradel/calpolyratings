@@ -1,0 +1,13 @@
+.signup_errors {
+  float:right;
+  color:red;
+}
+.form-register{
+  max-width: 330px;
+  padding: 20px;
+  margin: 0 auto;
+}
+
+.control-label {
+  padding-top: 10px;
+}

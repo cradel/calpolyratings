@@ -25,18 +25,24 @@ ALLOWED_HOSTS = ['localhost', "127.0.0.1"]
 # Application definition
 
 INSTALLED_APPS = [
-    'department_courses',
-    'core',
-    'teacher_profile',
-    'postings',
-    'home',
-    
+    'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'department_courses',
+    'core',
+    'teacher_profile',
+    'postings',
+    'home',
+    'authentication',
+
+    # 3rd party
+    'allauth',
+    'allauth.account',
 ]
 
 MIDDLEWARE = [
@@ -66,6 +72,16 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTHENTICATION_BACKENDS = (
+
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+
+)
 
 WSGI_APPLICATION = 'cpratings.wsgi.application'
 
@@ -105,13 +121,15 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Los_Angeles'
 
 USE_I18N = True
 
 USE_L10N = True
 
 USE_TZ = True
+
+SITE_ID = 1
 
 
 # Static files (CSS, JavaScript, Images)
@@ -127,3 +145,32 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 RECAPTCHA_PUBLIC_KEY = '6Le4q4QUAAAAAHqoRhibZ4xHM4qQCZFsn2-vWSpa'
 RECAPTCHA_SECRET_KEY = get_secret("RECAPTCHA_SECRET_KEY")
+
+#django-allauth
+LOGIN_REDIRECT_URL = '/'
+
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+
+ACCOUNT_EMAIL_REQUIRED = True
+
+ACCOUNT_PASSWORD_MIN_LENGTH = 8
+
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 3
+
+ACCOUNT_LOGOUT_ON_GET = True
+
+ACCOUNT_FORMS = {
+        'signup': 'authentication.forms.MySignupForm',
+        'login': 'authentication.forms.MyLoginForm',
+        'reset_password': 'authentication.forms.MyResetPasswordForm'
+    }
+
+ACCOUNT_USERNAME_VALIDATORS = 'authentication.validators.username_validators'
+
+ACCOUNT_ADAPTER = 'authentication.adapter.CusDefaultAccountAdapter'
+
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = '/'

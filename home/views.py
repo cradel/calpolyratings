@@ -8,6 +8,9 @@ from teacher_profile.models import Teacher_profile
 from postings.models import Post
 from department_courses.models import Department
 
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+
 
 # View handles the home page, i.e. search bar, filters, and teacher profiles in groups of 20
 class HomeView(ListView):
@@ -17,6 +20,9 @@ class HomeView(ListView):
   queryset = Teacher_profile.objects.all()
   paginate_by = 20
 
+  @method_decorator(login_required)
+  def dispatch(self, *args, **kwargs):
+      return super(HomeView, self).dispatch(*args, **kwargs)
 
   def get(self, request, *args, **kwargs):
     self.kwargs['template'] = 'home/home'
@@ -53,7 +59,15 @@ class HomeView(ListView):
 class Faq(TemplateView):
   template_name = 'home/faq.html'
 
+  @method_decorator(login_required)
+  def dispatch(self, *args, **kwargs):
+      return super(Faq, self).dispatch(*args, **kwargs)
+
 class Contact(TemplateView):
   template_name = 'home/contact.html'
+
+  @method_decorator(login_required)
+  def dispatch(self, *args, **kwargs):
+      return super(Contact, self).dispatch(*args, **kwargs)
 
 

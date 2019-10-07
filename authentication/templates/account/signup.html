@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load staticfiles %}
+
+{% block includes %}
+<link rel="stylesheet" href="{% static 'authentication/css/signup.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<form class="signup form-register" id="signup_form" method="post" action="{% url 'account_signup' %}">
+  {% csrf_token %}
+  <h2>{% trans "Sign Up" %} <span style="font-size: 11pt;"><a href="{% url 'account_login' %}">already have an account?</a></span> </h2>
+
+  <div class="form-group">
+    <div>
+      <label class="control-label" for="id_username" id='id_username_label'>username</label>
+      <span class="signup_errors control-label" id='username_errors'>{{ form.errors.username|striptags }}</span>
+    </div>
+    <input id='id_username' type="text" class="form-control" name="username" autofocus value="{{ form.username.value|default_if_none:''}}">
+
+    <label class="control-label" for="email">email address<span style="color:gray;"> (must be calpoly email)</span></label>
+    <span class="signup_errors control-label">{{ form.errors.email|striptags }}</span>
+    <input type="text" class="form-control" id="form-control" name="email">
+
+    <label class="control-label control-label" for="password1">password</label>
+    <span class="signup_errors control-label">{{ form.errors.password1|striptags }}</span>
+    <input type="password" class="form-control" id="form-control" name="password1">
+
+    <label class="control-label" for="password2">password <span style="color: gray;">(confirm)</span></label>
+    <span class="signup_errors control-label">{{ form.errors.password2|striptags }}</span>
+    <input type="password" class="form-control" id="form-control" name="password2">
+    <br>
+    <script type="text/javascript"> 
+      function onHuman(response) { 
+        document.getElementById('captcha').value = response; 
+      } 
+    </script>
+    <div style='margin: 0 auto;width: 275px;'>
+    <div class="g-recaptcha" data-callback="onHuman" data-theme="dark" style="transform:scale(0.89);
+    transform-origin:0 0;" data-sitekey="---"></div>
+    </div>
+    <input type="hidden" id="captcha" name="captcha" value="">
+    <br>
+    <button class='btn btn-primary btn-block' type='submit'>Submit</button>
+  </div>
+
+
+
+</form>
+
+<script>
+
+
+  $(document).ready(function() {
+    $('#id_username').on('blur', function() {
+      document.getElementById("id_username_label").style.color = "black";
+      input = document.getElementById('id_username').value.toLowerCase();
+      name_error = document.getElementById('username_errors').value;
+      if (input != '') {
+        $.get('/check_username/', {username: input}, function(data) {
+            $('#id_username').css('border-color', data);
+            $('#id_username_label').css("color", data);
+            if (name_error != '' && data == 'green') {
+              $('#username_errors').css("display", 'none');
+            }
+        });
+      };
+    });
+  });
+ 
+</script>
+{% endblock %}

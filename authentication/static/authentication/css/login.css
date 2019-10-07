@@ -1,0 +1,20 @@
+
+.form-signin {
+  max-width: 330px;
+  padding: 20px;
+  margin: 0 auto;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 13px;
+}
+.form-signin .checkbox {
+  font-weight: normal;
+}
+
+.form-signin input[type="password"] {
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+}
+

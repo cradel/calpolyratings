@@ -3,7 +3,8 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.views import View
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
-
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
 from department_courses.models import Course
 from postings.models import Post
@@ -11,8 +12,11 @@ from utilities import recaptcha_check
 from .forms import TeacherForm
 from .models import Teacher_profile
 
+
+
 # View returns teacher profile page given a slug
 # Returns up to 10 posts
+@login_required()
 def teacher_profile(request, teacher_name):
     out_of_posts = False
     profile = get_object_or_404(Teacher_profile, slug=teacher_name)
@@ -31,6 +35,9 @@ class AddTeacher(FormView):
   template_name = 'teacher_profile/teacher_form.html'
   form_class = TeacherForm
 
+  @method_decorator(login_required)
+  def dispatch(self, *args, **kwargs):
+      return super(AddTeacher, self).dispatch(*args, **kwargs)
 
   # Returns the form
   def get(self, request, *args, **kwargs):
